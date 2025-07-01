@@ -27,7 +27,14 @@ nltk.download("punkt", quiet=True)
 # ───────────────────────────────────
 # 1. Chroma と BM25 インデックス初期化
 # ───────────────────────────────────
-chroma_client = chromadb.PersistentClient(path="./chroma_db")
+# 環境変数から Chroma 保存パスを取得（デフォルトは ./chroma_db）
+chroma_db_path = os.getenv("CHROMA_DB_PATH", "./chroma_db")
+
+# Chroma の PersistentClient を明示的に Settings 経由で初期化
+chroma_client = chromadb.PersistentClient(
+    path=chroma_db_path,
+    settings=Settings(chroma_db_impl="duckdb+parquet", persist_directory=chroma_db_path)
+)
 collection = chroma_client.get_or_create_collection(name="alctax-act")
 
 def tokenize(text: str) -> list[str]:
