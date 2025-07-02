@@ -9,7 +9,6 @@ from chromadb.config import Settings
 from openai import OpenAI
 from collections import defaultdict
 import re
-from chromadb
 
 # 追加ライブラリ
 from rank_bm25 import BM25Okapi
