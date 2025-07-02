@@ -6,4 +6,4 @@ python-dotenv
 rank_bm25
 nltk
 numpy<2.0.0
-chromadb==0.4.24
+chromadb==1.0.13
