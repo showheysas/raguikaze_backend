@@ -9,7 +9,7 @@ from chromadb.config import Settings
 from openai import OpenAI
 from collections import defaultdict
 import re
-from chromadb import Client
+from chromadb
 
 # 追加ライブラリ
 from rank_bm25 import BM25Okapi
@@ -31,14 +31,7 @@ nltk.download("punkt", quiet=True)
 # 環境変数から Chroma 保存パスを取得（デフォルトは ./chroma_db）
 chroma_db_path = os.getenv("CHROMA_DB_PATH", "./chroma_db")
 
-# Chroma の PersistentClient を明示的に Settings 経由で初期化
-chroma_client = Client(
-    Settings(
-        chroma_api_impl="chromadb.api.local.LocalAPI",
-        chroma_db_impl="duckdb+parquet",
-        persist_directory=chroma_db_path
-    )
-)
+chroma_client = chromadb.PersistentClient(path=chroma_db_path)
 collection = chroma_client.get_or_create_collection(name="alctax-act")
 
 def tokenize(text: str) -> list[str]:

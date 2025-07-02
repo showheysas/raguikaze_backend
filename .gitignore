@@ -34,8 +34,8 @@ yarn-error.log*
 .env
 !.env.example
 
-chroma_db
-
+# chroma_db
+# Railwayでは除外してプッシュ対象とする。Renderでは除外しない＝記述する。
 
 # vercel
 .vercel
