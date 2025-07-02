@@ -5,5 +5,5 @@ chromadb
 python-dotenv
 rank_bm25
 nltk
-numpy
+numpy<2.0.0
 chromadb==0.4.24
