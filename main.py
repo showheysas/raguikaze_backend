@@ -66,6 +66,11 @@ all_data = collection.get(include=["documents"])
 all_docs = all_data["documents"]
 all_ids  = all_data["ids"]
 
+print("Chroma documents:", len(all_docs))
+print("Chroma DB path:", chroma_db_path)
+print("Chroma collection name:", collection.name)
+print("Chroma documents:", len(all_docs))
+
 tokenized_corpus = [tokenize(t) for t in all_docs]
 bm25 = BM25Okapi(tokenized_corpus)
 
