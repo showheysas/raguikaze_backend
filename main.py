@@ -198,3 +198,53 @@ async def ask_law(req: AskRequest):
         "answer": response.choices[0].message.content,
         "references": references
     }
+
+# ───────────────────────────────────
+# 5. /log エンドポイント
+# ───────────────────────────────────
+from fastapi import Request
+from fastapi.responses import JSONResponse
+import csv
+from datetime import datetime, timedelta, timezone
+import pathlib
+
+class LogRequest(BaseModel):
+    query: str
+    answer: str
+    kazemode: bool
+    timestamp: str  # ISO8601形式でFlutterから送信
+    user_agent: str
+    os: str
+
+@app.post("/log")
+async def log_entry(log: LogRequest):
+    try:
+        # 日本時間に変換
+        dt_utc = datetime.fromisoformat(log.timestamp)
+        JST = timezone(timedelta(hours=9))
+        dt_jst = dt_utc.astimezone(JST)
+        time_str = dt_jst.strftime("%Y-%m-%d %H:%M:%S")
+
+        # CSVファイルに追記
+        log_dir = pathlib.Path("logs")
+        log_dir.mkdir(parents=True, exist_ok=True)
+        log_file = log_dir / "raguikaze_logs.csv"
+
+        write_header = not log_file.exists()
+        with open(log_file, mode="a", newline="", encoding="utf-8") as f:
+            writer = csv.writer(f)
+            if write_header:
+                writer.writerow(["timestamp", "query", "answer", "kazemode", "user_agent", "os"])
+            writer.writerow([
+                time_str,
+                log.query.replace("\n", " "),
+                log.answer.replace("\n", " "),
+                log.kazemode,
+                log.user_agent,
+                log.os,
+            ])
+
+        return JSONResponse(content={"message": "Log saved"}, status_code=200)
+    except Exception as e:
+        return JSONResponse(content={"error": str(e)}, status_code=500)
+
