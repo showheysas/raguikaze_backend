@@ -248,3 +248,17 @@ async def log_entry(log: LogRequest):
     except Exception as e:
         return JSONResponse(content={"error": str(e)}, status_code=500)
 
+from fastapi.responses import FileResponse
+
+@app.get("/logs")
+async def get_logs():
+    log_file = "query_logs.csv"
+    if os.path.exists(log_file):
+        return FileResponse(
+            path=log_file,
+            media_type='text/csv',
+            filename="query_logs.csv"
+        )
+    else:
+        return {"error": "Log file not found"}
+
