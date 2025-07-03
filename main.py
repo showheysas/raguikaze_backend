@@ -252,12 +252,12 @@ from fastapi.responses import FileResponse
 
 @app.get("/logs")
 async def get_logs():
-    log_file = "query_logs.csv"
-    if os.path.exists(log_file):
+    log_file = pathlib.Path("logs/raguikaze_logs.csv")
+    if log_file.exists():
         return FileResponse(
             path=log_file,
             media_type='text/csv',
-            filename="query_logs.csv"
+            filename="raguikaze_logs.csv"
         )
     else:
         return {"error": "Log file not found"}
