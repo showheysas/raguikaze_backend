@@ -231,8 +231,8 @@ async def log_entry(log: LogRequest):
         log_file = log_dir / "raguikaze_logs.csv"
 
         write_header = not log_file.exists()
-        with open(log_file, mode="a", newline="", encoding="utf-8") as f:
-            writer = csv.writer(f)
+        with open(log_file, mode="a", newline="", encoding="utf-8-sig") as f:
+            writer = csv.writer(f, quoting=csv.QUOTE_ALL)
             if write_header:
                 writer.writerow(["timestamp", "query", "answer", "kazemode", "user_agent", "os"])
             writer.writerow([
