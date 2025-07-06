@@ -220,11 +220,8 @@ class LogRequest(BaseModel):
 @app.post("/log")
 async def log_entry(log: LogRequest):
     try:
-        # 日本時間に変換
-        dt_utc = datetime.fromisoformat(log.timestamp)
-        JST = timezone(timedelta(hours=9))
-        dt_jst = dt_utc.astimezone(JST)
-        time_str = dt_jst.strftime("%Y-%m-%d %H:%M:%S")
+        dt = datetime.fromisoformat(log.timestamp)
+        time_str = dt.strftime("%Y-%m-%d %H:%M:%S")
 
         # CSVファイルに追記
         log_dir = pathlib.Path("logs")
